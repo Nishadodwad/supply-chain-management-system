@@ -4,6 +4,7 @@ import com.supplychain.management.dto.UserDTO;
 import com.supplychain.management.entity.User;
 import com.supplychain.management.exception.ResourceNotFoundException;
 import com.supplychain.management.service.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
 
     @Autowired
     private UserService userService;
@@ -25,6 +27,11 @@ public class UserController {
     @GetMapping
     public List<UserDTO> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @GetMapping("/profile")
+    public String getProfile(Authentication auth) {
+        return "Logged in as: " + auth.getName();
     }
 
     @GetMapping("/{id}")
