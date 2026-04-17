@@ -1,35 +1,14 @@
-package com.supplychain.management.entity;
+package com.supplychain.management.dto;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "products")
-public class Product {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ProductDTO {
 
     private String name;
     private String description;
     private double price;
     private int quantity;
-    private String imageUrl;
+    private String imageUrl; // ✅ included
 
-    public Product() {}
-
-    public Product(String name, String description, double price, int quantity) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.quantity = quantity;
-    }
-
-    // GETTERS & SETTERS
-
-    public Long getId() {
-        return id;
-    }
+    // getters & setters
 
     public String getName() {
         return name;
@@ -62,6 +41,7 @@ public class Product {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
     public String getImageUrl() {
         return imageUrl;
     }
