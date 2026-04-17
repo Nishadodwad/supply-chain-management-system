@@ -19,10 +19,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping
-    public UserDTO createUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
+
 
     @GetMapping
     public List<UserDTO> getAllUsers() {
@@ -50,9 +47,5 @@ public class UserController {
         return "User deleted successfully";
     }
 
-    @PostMapping("/login")
-    public String login(@RequestParam String email,
-                        @RequestParam String password) {
-        return userService.login(email, password);
-    }
+
 }

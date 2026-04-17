@@ -1,6 +1,7 @@
 package com.supplychain.management.service;
 
 import com.supplychain.management.config.JwtUtil;
+import com.supplychain.management.dto.AuthResponse;
 import com.supplychain.management.dto.UserDTO;
 import com.supplychain.management.entity.User;
 import com.supplychain.management.exception.ResourceNotFoundException;
@@ -65,14 +66,18 @@ public class UserService {
                 user.getRole()
         );
     }
-    public String login(String email, String password) {
+    public AuthResponse login(String email, String password) {
+
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Invalid email or password"));
 
         if (passwordEncoder.matches(password, user.getPassword())) {
-            return jwtUtil.generateToken(user.getEmail(), user.getRole()); // 🔥 TOKEN RETURN
+
+            String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
+
+            return new AuthResponse(token, user.getEmail(), user.getRole());
         } else {
-            return "Invalid credentials";
+            throw new RuntimeException("Invalid credentials");
         }
     }
     @Autowired

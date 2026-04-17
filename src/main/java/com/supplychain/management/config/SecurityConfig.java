@@ -38,6 +38,12 @@ public class SecurityConfig {
                         // USER ONLY
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 
+                        .requestMatchers(
+                                "/auth/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         // everything else
                         .anyRequest().authenticated()
                 )
