@@ -72,6 +72,20 @@ public class OrderService {
                         new RuntimeException("Order not found"));
     }
 
+    public Order getMyOrder(Long orderId, String email) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() ->
+                        new RuntimeException("Order not found"));
+
+        if (!order.getUserEmail().equals(email)) {
+            throw new RuntimeException(
+                    "You are not allowed to view this order"
+            );
+        }
+
+        return order;
+    }
     public List<Order> getMyOrders(String email) {
         return orderRepository.findByUserEmail(email);
     }

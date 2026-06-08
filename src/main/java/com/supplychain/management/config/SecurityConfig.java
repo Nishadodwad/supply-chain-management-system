@@ -43,26 +43,42 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
 
-                        // USERS (ADMIN ONLY)
-                        .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
+                        // USER PROFILE (MUST COME BEFORE /users/**)
+                        .requestMatchers("/users/me")
+                        .hasAnyRole("USER", "ADMIN")
 
-                        // ORDERS
-                        .requestMatchers(HttpMethod.POST, "/orders").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/orders/my-orders").hasAnyRole("USER", "ADMIN")
+                        // USER ORDERS (MUST COME BEFORE /orders/*)
+                        .requestMatchers("/orders/my-orders/**")
+                        .hasAnyRole("USER", "ADMIN")
 
-                        // ADMIN ORDER MANAGEMENT
-                        .requestMatchers(HttpMethod.GET, "/orders").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/orders/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/orders/*/status").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/orders")
+                        .hasAnyRole("USER", "ADMIN")
 
-                        // FUTURE ADMIN MODULES
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        // USERS ADMIN ONLY
+                        .requestMatchers(HttpMethod.GET, "/users/**")
+                        .hasRole("ADMIN")
 
-                        // FUTURE USER MODULES
-                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/users/**")
+                        .hasRole("ADMIN")
 
-                        // Everything else requires login
+                        // ORDERS ADMIN ONLY
+                        .requestMatchers(HttpMethod.GET, "/orders")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/orders/*")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.PUT, "/orders/*/status")
+                        .hasRole("ADMIN")
+
+                        // ADMIN MODULE
+                        .requestMatchers("/admin/**")
+                        .hasRole("ADMIN")
+
+                        // USER MODULE
+                        .requestMatchers("/user/**")
+                        .hasAnyRole("USER", "ADMIN")
+
                         .anyRequest().authenticated()
                 )
 

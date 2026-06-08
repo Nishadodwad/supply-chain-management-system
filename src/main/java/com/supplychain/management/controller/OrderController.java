@@ -36,6 +36,16 @@ public class OrderController {
         return orderService.getOrderById(id);
     }
 
+    @GetMapping("/my-orders/{id}")
+    public Order getMyOrder(
+            @PathVariable Long id,
+            Authentication auth
+    ) {
+        return orderService.getMyOrder(
+                id,
+                auth.getName()
+        );
+    }
     @GetMapping("/my-orders")
     public List<Order> getMyOrders(Authentication auth) {
         return orderService.getMyOrders(auth.getName());

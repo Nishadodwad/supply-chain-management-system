@@ -41,6 +41,21 @@ public class UserController {
         return userService.updateUser(id, user);
     }
 
+    @GetMapping("/me")
+    public UserDTO getMyProfile(Authentication auth) {
+
+        return userService.getCurrentUser(auth.getName());
+    }
+    @PutMapping("/me")
+    public UserDTO updateMyProfile(
+            Authentication auth,
+            @RequestBody User user
+    ) {
+        return userService.updateCurrentUser(
+                auth.getName(),
+                user
+        );
+    }
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);

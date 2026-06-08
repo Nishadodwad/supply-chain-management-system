@@ -39,6 +39,30 @@ public class UserService {
 
         return convertToDTO(savedUser);
     }
+    public UserDTO getCurrentUser(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
+
+        return convertToDTO(user);
+    }
+    public UserDTO updateCurrentUser(String email, User updatedUser) {
+
+        User existingUser = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
+
+        existingUser.setName(updatedUser.getName());
+
+        existingUser.setPassword(
+                passwordEncoder.encode(updatedUser.getPassword())
+        );
+
+        User saved = userRepository.save(existingUser);
+
+        return convertToDTO(saved);
+    }
 
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll()
