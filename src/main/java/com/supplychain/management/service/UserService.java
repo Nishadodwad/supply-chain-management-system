@@ -42,18 +42,21 @@ public class UserService {
         return convertToDTO(user);
     }
     public User updateUser(Long id, User updatedUser) {
-        User existingUser = userRepository.findById(id).orElse(null);
 
-        if (existingUser != null) {
-            existingUser.setName(updatedUser.getName());
-            existingUser.setEmail(updatedUser.getEmail());
-            existingUser.setPassword(updatedUser.getPassword());
-            existingUser.setRole(updatedUser.getRole());
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
 
-            return userRepository.save(existingUser);
-        }
+        existingUser.setName(updatedUser.getName());
+        existingUser.setEmail(updatedUser.getEmail());
 
-        return null;
+        existingUser.setPassword(
+                passwordEncoder.encode(updatedUser.getPassword())
+        );
+
+        existingUser.setRole(updatedUser.getRole());
+
+        return userRepository.save(existingUser);
     }
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
