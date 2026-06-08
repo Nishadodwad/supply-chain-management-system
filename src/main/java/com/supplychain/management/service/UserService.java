@@ -22,9 +22,22 @@ public class UserService {
     private UserRepository userRepository;
 
     public UserDTO createUser(User user) {
+        user.setRole("USER");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
         return convertToDTO(savedUser); // 🚀 hide password
+    }
+    public UserDTO createAdmin(User user) {
+
+        user.setRole("ADMIN");
+
+        user.setPassword(
+                passwordEncoder.encode(user.getPassword())
+        );
+
+        User savedUser = userRepository.save(user);
+
+        return convertToDTO(savedUser);
     }
 
     public List<UserDTO> getAllUsers() {

@@ -29,15 +29,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        // PUBLIC
-                        .requestMatchers("/auth/**").permitAll()
-
-                        // ADMIN ONLY
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-
-                        // USER ONLY
-                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
-
+                        // PUBLIC APIs
                         .requestMatchers(
                                 "/auth/**",
                                 "/v3/api-docs/**",
@@ -45,9 +37,32 @@ public class SecurityConfig {
                                 "/swagger-ui.html"
                         ).permitAll()
 
+                        // PRODUCTS
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-                        .requestMatchers("/products/**").hasRole("ADMIN")
-                        // everything else
+                        .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
+
+                        // USERS (ADMIN ONLY)
+                        .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
+
+                        // ORDERS
+                        .requestMatchers(HttpMethod.POST, "/orders").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/orders/my-orders").hasAnyRole("USER", "ADMIN")
+
+                        // ADMIN ORDER MANAGEMENT
+                        .requestMatchers(HttpMethod.GET, "/orders").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/orders/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/orders/*/status").hasRole("ADMIN")
+
+                        // FUTURE ADMIN MODULES
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        // FUTURE USER MODULES
+                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+
+                        // Everything else requires login
                         .anyRequest().authenticated()
                 )
 
