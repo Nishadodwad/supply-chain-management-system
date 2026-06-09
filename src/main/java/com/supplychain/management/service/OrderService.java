@@ -89,4 +89,65 @@ public class OrderService {
     public List<Order> getMyOrders(String email) {
         return orderRepository.findByUserEmail(email);
     }
+    public Order cancelOrder(Long orderId, String email) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() ->
+                        new RuntimeException("Order not found"));
+
+        if (!order.getUserEmail().equals(email)) {
+            throw new RuntimeException(
+                    "You cannot cancel someone else's order"
+            );
+        }
+
+        if (order.getStatus() == OrderStatus.CANCELLED) {
+            throw new RuntimeException(
+                    "Order already cancelled"
+            );
+        }
+
+        if (order.getStatus() != OrderStatus.PLACED) {
+            throw new RuntimeException(
+                    "Only placed orders can be cancelled"
+            );
+        }
+
+        // Restore stock
+        for (OrderItem item : order.getItems()) {
+
+            Product product = productRepository.findById(
+                    item.getProductId()
+            ).orElseThrow();
+
+            product.setQuantity(
+                    product.getQuantity() + item.getQuantity()
+            );
+
+            productRepository.save(product);
+        }
+
+        order.setStatus(OrderStatus.CANCELLED);
+
+        return orderRepository.save(order);
+    }
+    public Order updateOrderStatus(
+            Long orderId,
+            OrderStatus newStatus
+    ) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() ->
+                        new RuntimeException("Order not found"));
+
+        if (order.getStatus() == OrderStatus.CANCELLED) {
+            throw new RuntimeException(
+                    "Cancelled orders cannot be updated"
+            );
+        }
+
+        order.setStatus(newStatus);
+
+        return orderRepository.save(order);
+    }
 }

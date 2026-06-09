@@ -54,6 +54,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/orders")
                         .hasAnyRole("USER", "ADMIN")
 
+                        .requestMatchers(HttpMethod.PUT,
+                                "/orders/cancel/**")
+                        .hasAnyRole("USER","ADMIN")
                         // USERS ADMIN ONLY
                         .requestMatchers(HttpMethod.GET, "/users/**")
                         .hasRole("ADMIN")
@@ -69,6 +72,24 @@ public class SecurityConfig {
                         .hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.PUT, "/orders/*/status")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/shipments/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/shipments/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/products/*/restock"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers("/drivers/**")
                         .hasRole("ADMIN")
 
                         // ADMIN MODULE

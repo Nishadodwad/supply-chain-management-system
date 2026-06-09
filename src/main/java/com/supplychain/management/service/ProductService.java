@@ -66,4 +66,19 @@ public class ProductService {
     public Page<Product> getPagedProducts(int page, int size) {
         return productRepository.findAll(PageRequest.of(page, size));
     }
+    public List<Product> getLowStockProducts() {
+        return productRepository.findByQuantityLessThan(10);
+    }
+    public Product restockProduct(Long productId, int quantity) {
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() ->
+                        new RuntimeException("Product not found"));
+
+        product.setQuantity(
+                product.getQuantity() + quantity
+        );
+
+        return productRepository.save(product);
+    }
 }

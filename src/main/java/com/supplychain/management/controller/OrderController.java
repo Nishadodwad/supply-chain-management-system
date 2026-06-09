@@ -1,6 +1,7 @@
 package com.supplychain.management.controller;
 
 import com.supplychain.management.dto.OrderRequestDTO;
+import com.supplychain.management.dto.OrderStatusDTO;
 import com.supplychain.management.entity.Order;
 import com.supplychain.management.service.OrderService;
 import org.springframework.security.core.Authentication;
@@ -49,5 +50,26 @@ public class OrderController {
     @GetMapping("/my-orders")
     public List<Order> getMyOrders(Authentication auth) {
         return orderService.getMyOrders(auth.getName());
+    }
+    @PutMapping("/cancel/{id}")
+    public Order cancelOrder(
+            @PathVariable Long id,
+            Authentication auth
+    ) {
+        return orderService.cancelOrder(
+                id,
+                auth.getName()
+        );
+    }
+    @PutMapping("/{id}/status")
+    public Order updateOrderStatus(
+            @PathVariable Long id,
+            @RequestBody OrderStatusDTO dto
+    ) {
+
+        return orderService.updateOrderStatus(
+                id,
+                dto.getStatus()
+        );
     }
 }

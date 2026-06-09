@@ -79,4 +79,15 @@ public class ProductController {
     ) {
         return productService.getPagedProducts(page, size);
     }
+    @GetMapping("/low-stock")
+    public List<Product> getLowStockProducts() {
+        return productService.getLowStockProducts();
+    }
+    @PutMapping("/{id}/restock")
+    public Product restockProduct(
+            @PathVariable Long id,
+            @RequestParam int quantity
+    ) {
+        return productService.restockProduct(id, quantity);
+    }
 }

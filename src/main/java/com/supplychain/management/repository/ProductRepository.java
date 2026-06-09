@@ -10,4 +10,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     boolean existsByName(String name);
 
     List<Product> findByNameContainingIgnoreCase(String keyword);
+    List<Product> findByQuantityLessThan(int quantity);
 }
