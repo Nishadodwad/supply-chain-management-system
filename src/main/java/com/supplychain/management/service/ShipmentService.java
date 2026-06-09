@@ -6,6 +6,7 @@ import com.supplychain.management.repository.*;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -102,5 +103,24 @@ public class ShipmentService {
         return shipmentRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Shipment not found"));
+    }
+    public List<Shipment> getMyShipments(String email) {
+
+        List<Order> orders =
+                orderRepository.findByUserEmail(email);
+
+        List<Shipment> shipments =
+                new ArrayList<>();
+
+        for (Order order : orders) {
+
+            shipments.addAll(
+                    shipmentRepository.findByOrderId(
+                            order.getId()
+                    )
+            );
+        }
+
+        return shipments;
     }
 }

@@ -74,6 +74,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/orders/*/status")
                         .hasRole("ADMIN")
 
+                        .requestMatchers("/shipments/my-shipments")
+                        .hasAnyRole("USER","ADMIN")
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/shipments/**"
@@ -95,6 +97,8 @@ public class SecurityConfig {
                         .requestMatchers("/vehicles/**")
                         .hasRole("ADMIN")
 
+                        .requestMatchers("/locations/**")
+                        .hasRole("ADMIN")
                         // ADMIN MODULE
                         .requestMatchers("/admin/**")
                         .hasRole("ADMIN")

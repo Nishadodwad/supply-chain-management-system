@@ -5,6 +5,7 @@ import com.supplychain.management.entity.Shipment;
 import com.supplychain.management.entity.ShipmentStatus;
 import com.supplychain.management.service.ShipmentService;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,5 +46,13 @@ public class ShipmentController {
             @RequestParam ShipmentStatus status
     ) {
         return shipmentService.updateShipmentStatus(id, status);
+    }
+    @GetMapping("/my-shipments")
+    public List<Shipment> getMyShipments(
+            Authentication auth
+    ) {
+        return shipmentService.getMyShipments(
+                auth.getName()
+        );
     }
 }
