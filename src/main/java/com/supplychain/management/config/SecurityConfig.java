@@ -92,6 +92,9 @@ public class SecurityConfig {
                         .requestMatchers("/drivers/**")
                         .hasRole("ADMIN")
 
+                        .requestMatchers("/vehicles/**")
+                        .hasRole("ADMIN")
+
                         // ADMIN MODULE
                         .requestMatchers("/admin/**")
                         .hasRole("ADMIN")
