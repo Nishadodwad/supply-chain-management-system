@@ -3,8 +3,8 @@ package com.supplychain.management.dto;
 public class ShipmentDTO {
 
     private Long orderId;
-    private String driverName;
-    private String vehicleNumber;
+    private Long driverId;
+    private Long vehicleId;
 
     public Long getOrderId() {
         return orderId;
@@ -14,19 +14,20 @@ public class ShipmentDTO {
         this.orderId = orderId;
     }
 
-    public String getDriverName() {
-        return driverName;
+    public Long getDriverId() {
+        return driverId;
     }
 
-    public void setDriverName(String driverName) {
-        this.driverName = driverName;
+    public Long getVehicleId() {
+        return vehicleId;
     }
 
-    public String getVehicleNumber() {
-        return vehicleNumber;
+    public void setDriverId(Long driverId) {
+        this.driverId = driverId;
     }
 
-    public void setVehicleNumber(String vehicleNumber) {
-        this.vehicleNumber = vehicleNumber;
+    public void setVehicleId(Long vehicleId) {
+        this.vehicleId = vehicleId;
     }
+
 }

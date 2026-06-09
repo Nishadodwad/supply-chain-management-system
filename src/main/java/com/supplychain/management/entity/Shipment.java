@@ -12,9 +12,13 @@ public class Shipment {
 
     private Long orderId;
 
-    private String driverName;
+    @ManyToOne
+    @JoinColumn(name = "driver_id")
+    private Driver driver;
 
-    private String vehicleNumber;
+    @ManyToOne
+    @JoinColumn(name = "vehicle_id")
+    private Vehicle vehicle;
 
     @Enumerated(EnumType.STRING)
     private ShipmentStatus status;
@@ -31,22 +35,23 @@ public class Shipment {
         this.orderId = orderId;
     }
 
-    public String getDriverName() {
-        return driverName;
+
+
+    public Driver getDriver() {
+        return driver;
     }
 
-    public void setDriverName(String driverName) {
-        this.driverName = driverName;
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 
-    public String getVehicleNumber() {
-        return vehicleNumber;
+    public Vehicle getVehicle() {
+        return vehicle;
     }
 
-    public void setVehicleNumber(String vehicleNumber) {
-        this.vehicleNumber = vehicleNumber;
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
-
     public ShipmentStatus getStatus() {
         return status;
     }

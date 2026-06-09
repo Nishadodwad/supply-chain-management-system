@@ -13,13 +13,19 @@ public class ShipmentService {
 
     private final ShipmentRepository shipmentRepository;
     private final OrderRepository orderRepository;
+    private final DriverRepository driverRepository;
+    private final VehicleRepository vehicleRepository;
 
     public ShipmentService(
             ShipmentRepository shipmentRepository,
-            OrderRepository orderRepository
+            OrderRepository orderRepository,
+            DriverRepository driverRepository,
+            VehicleRepository vehicleRepository
     ) {
         this.shipmentRepository = shipmentRepository;
         this.orderRepository = orderRepository;
+        this.driverRepository = driverRepository;
+        this.vehicleRepository = vehicleRepository;
     }
 
     public Shipment createShipment(
@@ -34,8 +40,23 @@ public class ShipmentService {
         Shipment shipment = new Shipment();
 
         shipment.setOrderId(order.getId());
-        shipment.setDriverName(dto.getDriverName());
-        shipment.setVehicleNumber(dto.getVehicleNumber());
+        Driver driver = driverRepository.findById(
+                dto.getDriverId()
+        ).orElseThrow(() ->
+                new RuntimeException("Driver not found"));
+
+        Vehicle vehicle = vehicleRepository.findById(
+                dto.getVehicleId()
+        ).orElseThrow(() ->
+                new RuntimeException("Vehicle not found"));
+
+        shipment.setDriver(driver);
+        shipment.setVehicle(vehicle);
+        driver.setAvailable(false);
+        vehicle.setAvailable(false);
+
+        driverRepository.save(driver);
+        vehicleRepository.save(vehicle);
         shipment.setStatus(ShipmentStatus.PENDING);
 
         return shipmentRepository.save(shipment);
@@ -64,6 +85,11 @@ public class ShipmentService {
             order.setStatus(OrderStatus.DELIVERED);
 
             orderRepository.save(order);
+            shipment.getDriver().setAvailable(true);
+            shipment.getVehicle().setAvailable(true);
+
+            driverRepository.save(shipment.getDriver());
+            vehicleRepository.save(shipment.getVehicle());
         }
 
         return shipmentRepository.save(shipment);
